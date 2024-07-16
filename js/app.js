@@ -3,12 +3,12 @@ const Botones = document.querySelectorAll(".btn-primary");
 const Carrito = document.getElementById("carrito");
 const Template = document.getElementById("template");
 //.target devolverá el elemento exacto en el que se hizo clic, permitiendo manipularlo o acceder a sus propiedades
-const CarritoObjeto = {};
+const CarritoObjeto = [];
 
-const MostrarCarrito = (Producto) => {
+const MostrarCarrito = () => {
   Carrito.textContent = "";
 
-  Object.values(CarritoObjeto).forEach((item) => {
+  CarritoObjeto.forEach((item) => {
     const Clone = Template.content.cloneNode(true);
     Clone.querySelector(".lead").textContent = item.titulo;
     Clone.querySelector(".bg-primary").textContent = item.cantidad;
@@ -26,13 +26,17 @@ const AgregarCarrito = (e) => {
     cantidad: 1,
   };
 
-  if (CarritoObjeto.hasOwnProperty(Producto.titulo)) {
-    Producto.cantidad = CarritoObjeto[Producto.titulo].cantidad + 1;
+  const Posicion = CarritoObjeto.findIndex((item) => {
+    return item.titulo === Producto.titulo;
+  });
+
+  if (Posicion === -1) {
+    CarritoObjeto.push(Producto);
+  } else {
+    CarritoObjeto[Posicion].cantidad++;
   }
 
-  CarritoObjeto[Producto.titulo] = Producto;
-
-  MostrarCarrito(Producto);
+  MostrarCarrito();
 };
 
 Botones.forEach((item) => {
